@@ -82,14 +82,21 @@ WSGI_APPLICATION = 'library_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'feedback',
+        'USER': 'admindjango',             # Your MySQL username
+        'PASSWORD': 'password',         # Your MySQL password
+        'HOST': '127.0.0.1',                 # Set to 'localhost' if MySQL is running locally
+        'PORT': '3306',                      # Default MySQL port (3306)
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
 }
+
+
 
 
 # Password validation
