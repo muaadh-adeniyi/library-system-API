@@ -7,13 +7,12 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/5.1/ref/settings/
+https://docs.djangoproject.com/en/5.1/ref/settings
 """
-import pymysql
-pymysql.install_as_MySQLdb()
 
 
 import os
+import dj_database_url
 
 
 from pathlib import Path
@@ -34,7 +33,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.environ.get("DEBUG") != "False"
 
-ALLOWED_HOSTS = ['.vercel.app' , '.now.sh']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -86,19 +85,12 @@ WSGI_APPLICATION = 'library_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'feedback',
-        'USER': 'admindjango',             # Your MySQL username
-        'PASSWORD': 'password',         # Your MySQL password
-        'HOST': '127.0.0.1',                 # Set to 'localhost' if MySQL is running locally
-        'PORT': '3306',                      # Default MySQL port (3306)
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
-    }
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
+
+
 
 
 
