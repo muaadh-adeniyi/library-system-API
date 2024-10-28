@@ -100,6 +100,7 @@ DATABASES['default'] = dj_database_url.parse(config("DATABASE_URL"))
 
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -144,3 +145,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles", "static")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 APPEND_SLASH = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}
