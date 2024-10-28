@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings
 """
 
 
+
 import os
 import dj_database_url
 
@@ -34,9 +35,9 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production
 
-DEBUG = os.environ.get("DEBUG") != "False"
+DEBUG = False
 
-ALLOWED_HOSTS = ['library-system-api-6oon.onrender.com']
+ALLOWED_HOSTS = ['library-system-api-6oon.onrender.com' , '127.0.0.1']
 
 
 # Application definition
