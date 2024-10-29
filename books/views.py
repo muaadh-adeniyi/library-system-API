@@ -5,6 +5,11 @@ from rest_framework.response import Response
 from .models import Book
 from django.http import Http404
 from  django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 
 # Create your views here.
 
@@ -131,7 +136,21 @@ def delete_book(request , pk):
 
 
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Library System API",
+        default_version='v1',
+        description="API documentation for the Library System",
+        terms_of_service="https://www.example.com/terms/",
+        contact=openapi.Contact(email="muaadhadeleye@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
+def home(request):
+    return schema_view(request)
 
 
 
