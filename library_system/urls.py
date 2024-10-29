@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from books.views import home  
+from books.views import home
 
 
 # Create the schema view for Swagger
@@ -41,5 +41,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('books.urls')),
     path('', home, name='home'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),  # Optional: Redoc endpoint
 ]

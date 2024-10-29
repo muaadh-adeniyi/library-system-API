@@ -9,6 +9,7 @@ from django.shortcuts import render
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.shortcuts import redirect
 
 
 # Create your views here.
@@ -150,7 +151,8 @@ schema_view = get_schema_view(
 )
 
 def home(request):
-    return schema_view(request)
+    # Redirect to Swagger documentation
+    return redirect('schema-swagger-ui')
 
 
 
