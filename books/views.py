@@ -61,7 +61,7 @@ def create_book(request):
             "message": "Book created successfully",
             "data": serializer.data
         }
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_201_CREATED )
 
     data = {
         "status": "error",
