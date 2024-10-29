@@ -145,7 +145,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles", "static")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
