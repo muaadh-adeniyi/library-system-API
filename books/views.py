@@ -1,18 +1,17 @@
-from .serializers import BookSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Book
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render, redirect
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .models import Book
+from .serializers import BookSerializer
+from django.shortcuts import redirect
 
-# Create your views here.
-
-# List all books
+# Swagger schema for list of books
+@swagger_auto_schema(
+    method="get",
+    responses={200: openapi.Response("Books retrieved successfully", BookSerializer(many=True))}
+)
 @api_view(['GET'])
 def list_book(request):
     books = Book.objects.all()
@@ -27,7 +26,18 @@ def list_book(request):
     }
     return Response(data, status=status.HTTP_200_OK)
 
-# Retrieve book by id
+
+# Swagger schema for retrieving a book by ID
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: openapi.Response("Book retrieved successfully", BookSerializer),
+        404: "Book not found"
+    },
+    manual_parameters=[
+        openapi.Parameter("pk", openapi.IN_PATH, description="ID of the book to retrieve", type=openapi.TYPE_STRING, format="uuid", required=True)
+    ]
+)
 @api_view(['GET'])
 def get_book(request, pk):
     try:
@@ -37,9 +47,7 @@ def get_book(request, pk):
             "status": "error",
             "code": 404,
             "message": "Book not found",
-            "errors": {
-                "details": f"No book found with id {pk}"
-            }
+            "errors": {"details": f"No book found with id {pk}"}
         }, status=status.HTTP_404_NOT_FOUND)
 
     serializer = BookSerializer(book)
@@ -51,7 +59,16 @@ def get_book(request, pk):
     }
     return Response(data, status=status.HTTP_200_OK)
 
-# Add new book
+
+# Swagger schema for creating a new book
+@swagger_auto_schema(
+    method="post",
+    request_body=BookSerializer,
+    responses={
+        201: openapi.Response("Book created successfully", BookSerializer),
+        400: "Invalid data"
+    }
+)
 @api_view(['POST'])
 def create_book(request):
     serializer = BookSerializer(data=request.data)
@@ -73,7 +90,20 @@ def create_book(request):
     }
     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-# Update a book
+
+# Swagger schema for updating a book
+@swagger_auto_schema(
+    method="put",
+    request_body=BookSerializer,
+    responses={
+        200: openapi.Response("Book updated successfully", BookSerializer),
+        404: "Book not found",
+        400: "Invalid data"
+    },
+    manual_parameters=[
+        openapi.Parameter("pk", openapi.IN_PATH, description="ID of the book to update", type=openapi.TYPE_STRING, format="uuid", required=True)
+    ]
+)
 @api_view(['PUT'])
 def update_book(request, pk):
     try:
@@ -83,9 +113,7 @@ def update_book(request, pk):
             "status": "error",
             "code": 404,
             "message": "Book not found",
-            "errors": {
-                "details": f"No book found with id {pk}."
-            }
+            "errors": {"details": f"No book found with id {pk}"}
         }, status=status.HTTP_404_NOT_FOUND)
 
     serializer = BookSerializer(book, data=request.data)
@@ -105,7 +133,18 @@ def update_book(request, pk):
         "errors": serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
 
-# Delete a book
+
+# Swagger schema for deleting a book
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        204: "Book deleted successfully",
+        404: "Book not found"
+    },
+    manual_parameters=[
+        openapi.Parameter("pk", openapi.IN_PATH, description="ID of the book to delete", type=openapi.TYPE_STRING, format="uuid", required=True)
+    ]
+)
 @api_view(['DELETE'])
 def delete_book(request, pk):
     try:
@@ -115,9 +154,7 @@ def delete_book(request, pk):
             "status": "error",
             "code": 404,
             "message": "Book not found",
-            "errors": {
-                "details": f"No book found with id {pk}."
-            }
+            "errors": {"details": f"No book found with id {pk}"}
         }, status=status.HTTP_404_NOT_FOUND)
 
     book.delete()
@@ -128,20 +165,7 @@ def delete_book(request, pk):
         "data": None
     }, status=status.HTTP_204_NO_CONTENT)
 
-# Swagger Schema View Configuration
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Library System API",
-        default_version='v1',
-        description="API documentation for the Library System",
-        terms_of_service="https://www.example.com/terms/",
-        contact=openapi.Contact(email="muaadhadeleye@gmail.com"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
 
-# Home view redirects to Swagger documentation
+# Redirect to Swagger documentation as the home page
 def home(request):
     return redirect('schema-swagger-ui')
