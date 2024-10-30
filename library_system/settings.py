@@ -37,7 +37,12 @@ SECRET_KEY = config("SECRET_KEY")
 
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = [
+    'localhost',  
+    '127.0.0.1',
+    'library-system-api-2ujo.onrender.com',
+]
+
 
 
 # Application definition
